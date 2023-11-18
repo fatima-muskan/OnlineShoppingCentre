@@ -1,17 +1,34 @@
 import React from 'react'
 import Header from "./Header";
 import Footer from './Footer';
+import {Helmet} from "react-helmet";
 
-const layout = ({children}) => {
+const layout = ({children,title,description,keywords,author }) => {
   return (
     <div>
+        <Helmet>
+          <meta charSet="utf-8" />
+          
+            <meta name="description" content={description} />
+            <meta name="keywords" content={keywords} />
+            <meta name="author" content={author} />
+          
+          <title>{title}</title>
+        </Helmet>
         <Header/>
-        <main style={{minHeight:'80vh'}}>
+        <main style={{minHeight:'70vh'}}>
         {children}
         </main>
         <Footer/>
     </div>
   )
+}
+
+layout.defaultProps = {
+  title: `Sell It Now!`,
+  description: 'Sell It Now!',
+  keywords: 'mern,react,node,mongodb',
+  author:'Mukarram Ali',
 }
 
 export default layout
