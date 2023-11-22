@@ -2,6 +2,7 @@ import React from 'react'
 import {NavLink,Link} from 'react-router-dom'
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { useAuth } from '../../context/auth';
+import toast from 'react-hot-toast';
 
 const Header = () => {
   const [auth,setAuth]=useAuth();
@@ -12,6 +13,7 @@ const Header = () => {
       token:'',
     });
     localStorage.removeItem('auth');
+    toast.success('Log Out Successfully');
   }
   return (
     <>
