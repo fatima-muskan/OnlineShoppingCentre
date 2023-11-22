@@ -79,19 +79,11 @@ font-family: 'Poppins', sans-serif; */
 
 .contactus{
   align-items: center;
-  padding-left: 30px;
-  padding-top: 30px;
+  padding-left: 15px;
+  padding-top: 15px;
 }
 
-/* Register Page */
 
-.register{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 70vh;
-  flex-direction: column;
-}
 
 /* Login Page */
 .wireframe {

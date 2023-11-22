@@ -1,45 +1,72 @@
-import React from 'react'
+import React,{useState} from 'react'
 import Layout from './../../components/Layout/Layout';
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
+import '../../styles/authStyle.css';
+import { useAuth } from '../../context/auth';
 
-const Register = () => {
+
+const Login = () => {
+    const [email,setEmail] = useState("");
+    const [password,setPassword] = useState("");
+
+    const [auth,setAuth]=useAuth();
+    const navigate= useNavigate()
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        const res = await axios.post('/api/v1/auth/login',{email,password});
+        if(res.data.success){
+          toast.success(res.data.message);
+          setAuth({
+            ...auth,
+            user: res.data.user,
+            token:res.data.token,
+          });
+          localStorage.setItem('auth', JSON.stringify(res.data))
+          navigate('/');
+        }else{
+          toast.error(res.data.message);
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error('Something Went wrong');
+      }
+    };
   return (
     <Layout title="Register - Sell It Now!">
-        <div className="wireframe">
-      <div className="overlap-group-wrapper">
-        <div className="overlap-group">
-          <div className="rectangle" />
-          <Link className="text-wrapper" to="/about">About</Link>
-          <Link className="div" to="/policy">Privacy</Link>
-          <Link className="text-wrapper-2" to="/policy">Terms of Use</Link>
-          <Link className="text-wrapper-3" to="/policy">FAQ.</Link>
+        <div className='row Login-img'>
+            <div className='col-md-6'>
+            <img
+                    src='/images/login.png'
+                    alt='Register Now'
+                    style={{width:"100%"}}
+                />
+            </div>
+            <div className='col-md-4 register-inputs'>
+            
+        <h1 className='bg-dark p-2 text-white text-center'>Log In</h1>
+        <form onSubmit={handleSubmit} >
           
-          <div className="ellipse" />
-          <div className="ellipse-2" />
-          <div className="ellipse-3" />
-          <div className="text-wrapper-4">Sell It Now!.</div>
-          <div className="ellipse-4" />
-          <div className="rectangle-2" />
-          <div className="rectangle-3" />
-          <div className="rectangle-4" />
-          <div className="rectangle-5" />
-          <div className="ellipse-5" />
-          <div className="rectangle-6" />
-          <div className="text-wrapper-5">Log in</div>
-          <img className="line" alt="Line" src="line-1.svg" />
-          <div className="text-wrapper-6">Email</div>
-          <img className="img" alt="Line" src="line-2.svg" />
-          <div className="text-wrapper-7">Password</div>
-          <div className="text-wrapper-8">Keep me Logged in</div>
-          <div className="text-wrapper-9">Dont have an account?</div>
-          <div className="rectangle-7" />
-          <Link className="text-wrapper-10" to="/policy">Log In</Link>
-          <Link className="text-wrapper-11" to="/policy">Sign Up</Link>
+          <div className="mb-3">
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="form-control" id="exampleInputEmail1" placeholder='Enter Email'/>
+          </div>
+          <div className="mb-3">
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="form-control" id="exampleInputPassword1" placeholder='Enter Password'/>
+          </div>
+          
+          <button type="submit" className="btn btn-primary submit-button">Login</button>
+        </form>
+        <p>Dont Have a Account? <Link to="/register">Sign Up</Link></p>
+
+        
+            </div>
         </div>
-      </div>
-    </div>
     </Layout>
   )
 }
 
-export default Register
+export default Login

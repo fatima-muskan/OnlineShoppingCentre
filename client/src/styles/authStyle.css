@@ -1,0 +1,23 @@
+/* Register Page */
+.Login-img{
+    align-items: center;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+  }
+  
+  .submit-button:hover{
+    border: 1px solid black;
+    background: #000000;
+  }
+  
+  .register{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    flex-direction: column;
+  }
+
+  

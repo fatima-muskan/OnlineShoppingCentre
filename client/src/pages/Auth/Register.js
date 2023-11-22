@@ -1,8 +1,10 @@
 import React,{useState} from 'react'
 import Layout from './../../components/Layout/Layout';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify'
 import axios from 'axios';
+import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
+import '../../styles/authStyle.css';
 
 const Register = () => {
     const [name,setName] = useState("");
@@ -29,8 +31,17 @@ const Register = () => {
     };
   return (
     <Layout title="Register - Sell It Now!">
-        <div className='register'>
-        <h1>Register Page</h1>
+      <div className='row Login-img'>
+            <div className='col-md-6'>
+            <img
+                    src='/images/login.png'
+                    alt='Register Now'
+                    style={{width:"100%"}}
+                />
+            </div>
+            <div className='col-md-4 register-inputs'>
+            
+        <h1 className='bg-dark p-2 text-white text-center'>Sign Up</h1>
         <form onSubmit={handleSubmit} >
           <div className="mb-3">
             <input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="form-control" id="exampleInputEmail1" placeholder='Enter Name'/>
@@ -47,11 +58,14 @@ const Register = () => {
           <div className="mb-3">
             <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} required className="form-control" id="exampleInputEmail1" placeholder='Enter Address'/>
           </div>
-          
-          <button type="submit" className="btn btn-primary">Submit</button>
+          <button type="submit" className="btn btn-primary submit-button">Submit</button>
         </form>
+        <p>Already Have An Account? <Link to="/login">Sign In</Link></p>
 
+        
+            </div>
         </div>
+        
     </Layout>
   )
 }
