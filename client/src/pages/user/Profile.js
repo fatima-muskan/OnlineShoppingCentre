@@ -1,21 +1,17 @@
 import React from 'react'
 import Layout from './../../components/Layout/Layout';
 import UserMenu from '../../components/Layout/UserMenu';
-import { useAuth } from '../../context/auth';
 
-const Dashboard = () => {
-  const [auth]=useAuth();
+const Profile = () => {
   return (
-    <Layout title={'Dashboard - Sell It Now'}>
+    <Layout title={'Profile'}>
         <div className='container-fluid p-3 m-3'>
             <div className='row'>
                 <div className='col-md-3'>
                     <UserMenu/>
                 </div>
                 <div className='col-md-9'>
-                    <div className='card w-75 p-3'>
-                      <h3>{auth?.user?.name}</h3>
-                    </div>
+                    <h1>Profile</h1>
                 </div>
             </div>
         </div>
@@ -23,4 +19,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default Profile
