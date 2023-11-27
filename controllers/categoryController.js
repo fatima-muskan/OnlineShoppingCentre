@@ -70,7 +70,7 @@ export const updateCategoryController = async(req,res) =>{
 
 export const categoryController = async( req,res) =>{
     try {
-        const category=await categoryModel.find({});
+        const category=await categoryModel.find({ isActive: 1 });
         res.status(200).send({
             success:true,
             message:'All Categories List',
@@ -107,7 +107,11 @@ export const singleCategoryController = async(req,res) =>{
 export const deleteCategoryController = async(req,res) =>{
     try {
         const {id}=req.params
-        const category= await categoryModel.findByIdAndDelete(id)
+        const updatedCategory = await categoryModel.findByIdAndUpdate(
+            id,
+            { isActive:0 },
+            { new: true }
+        );
         res.status(200).send({
             success:true,
             message:'Category Deleted Successfully'

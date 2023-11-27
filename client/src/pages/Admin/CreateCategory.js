@@ -65,6 +65,23 @@ const CreateCategory = () => {
       toast.error('Something went wrong')
     }
   }
+  // Handle Delete Category
+  const handleDelete = async(id) => {
+    
+    try {
+      const {data}=await axios.put(`/api/v1/category/delete-category/${id}`,{isActive:0})
+      if(data.success){
+        toast.success(`Deleted successfully`);
+        getAllCategory()
+      }
+      else{
+        toast.success(`Something went wrong`);
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error('Something went wrong')
+    }
+  }
   return (
     <Layout title={'Create Category'}>
         <div className='container-fluid m-3 p-3'>
@@ -92,7 +109,7 @@ const CreateCategory = () => {
                           <td key={c._id}>{c.name}</td>
                           <td>
                             <button className='btn btn-primary ms-2' onClick={() => {setVisible(true); setUpdatedName(c.name); setSelected(c);}}>Edit</button>
-                          <button className='btn btn-danger ms-2'>Delete</button>
+                          <button className='btn btn-danger ms-2' onClick={()=>{handleDelete(c._id)}}>Delete</button>
                           </td>
                          
                       </tr>
