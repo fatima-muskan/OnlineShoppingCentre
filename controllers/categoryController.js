@@ -35,19 +35,27 @@ export const updateCategoryController = async(req,res) =>{
     try {
         const {name}=req.body
         const {id}=req.params
-        const oldCategory = await categoryModel.findById(id);
-        const category=await categoryModel.findByIdAndUpdate(id,{name,slug:slugify(name)},{new:true})
+        // Fetch the current category before the update
+        const previousCategory = await categoryModel.findById(id);
+        // Update the category
+        const updatedCategory = await categoryModel.findByIdAndUpdate(
+            id,
+            { name, slug: slugify(name) },
+            { new: true }
+        );
         
         // Adding in Audit Table
-        const new_name=name
-        const prev_name=oldCategory.name;
-        const oldSlug=oldCategory.slug;
-        const category_audit=await new categoryModel_Audit({prev_name,new_name,prev_slug:slugify(oldSlug),new_slug:slugify(name)}).save();
         
+        const categoryAudit = new categoryModel_Audit({
+            previousCategory,
+            newCategory: updatedCategory.toObject(), // Convert Mongoose document to plain object
+        });
+        await categoryAudit.save();
+
         res.status(200).send({
             success:true,
             message:'Category Updated Successfully',
-            category,
+            updatedCategory,
             
         })
     } catch (error) {

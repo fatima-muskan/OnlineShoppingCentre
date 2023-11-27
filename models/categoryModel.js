@@ -9,6 +9,10 @@ const categorySchema = new mongoose.Schema({
     slug:{
         type:String,
         lowercase:true,
+    },
+    isActive:{
+        type:Number,
+        default:1,
     }
 },{timestamps:true}
 )

@@ -1,22 +1,14 @@
 import mongoose from "mongoose";
 
 const categorySchema_audit = await new mongoose.Schema({
-    prev_name:{
-        type:String,
-        
+    previousCategory: {
+        type: mongoose.Schema.Types.Mixed, // Store the entire previous category object
+        required: true,
     },
-    new_name:{
-        type:String,
-        
+    newCategory: {
+        type: mongoose.Schema.Types.Mixed, // Store the entire new category object
+        required: true,
     },
-    prev_slug:{
-        type:String,
-        
-    },
-    new_slug:{
-        type:String,
-        
-    }
 },{timestamps:true}
 )
 
