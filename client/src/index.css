@@ -83,6 +83,12 @@ font-family: 'Poppins', sans-serif; */
   padding-top: 15px;
 }
 
+/* Products Page*/
+.product-link{
+  text-decoration: none !important;
+  color: black !important;
+}
+
 
 
 /* Login Page */

@@ -13,7 +13,7 @@ router.get('/get-product/:slug', getSingleProductController)
 // Get Photo
 router.get('/product-photo/:pid',productPhotoController)
 // Delete Product
-router.put('/product/:pid',deleteProductController)
+router.put('/delete-product/:pid',deleteProductController)
 // update Product
 router.put('/update-product/:pid',requireSignIn,isAdmin,formidable(),updateProductController)
 export default router

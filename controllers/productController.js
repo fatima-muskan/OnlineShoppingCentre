@@ -165,48 +165,30 @@ export const updateProductController = async(req,res) =>{
             res.status(500).send({error:'Photo is required ad should be less than 1mb'})
         }
         // Audit Table
-        const prev_product=await productModel.findById(req.params.pid)
-        const prev_name=prev_product.name;
-        const prev_slug=prev_product.slug;
-        const prev_description=prev_product.description;
-        const prev_price=prev_product.price;
-        const prev_category=prev_product.category;
-        const prev_quantity=prev_product.quantity;
-        const prev_photo=prev_product.photo;
-        const prev_shipping=prev_product.shipping;
-        const prev_isActive=prev_product.isActive
-        const new_name=name
-        //const new_slug=slugify(slug)
-        const new_description=description
-        const new_price=price
-        const new_category=category
-        const new_quantity=quantity
-        const new_photo=photo
-        const new_shipping=shipping
-        const new_isActive=isActive
-        const products=await productModel.findByIdAndUpdate(req.params.pid,{...req.fields, slug:slugify(name)},{new:true})
+        const previousProduct=await productModel.findById(req.params.pid)
+        const updatedProduct=await productModel.findByIdAndUpdate(req.params.pid,{...req.fields, slug:slugify(name)},{new:true})
         if(photo){
-            products.photo.data=fs.readFileSync(photo.path)
-            products.photo.contentType=photo.type
+            updatedProduct.photo.data=fs.readFileSync(photo.path)
+            updatedProduct.photo.contentType=photo.type
         }
-        await products.save()
+        await updatedProduct.save()
 
-        const products_Audit=new productModel_audit({new_name,new_slug:slugify(name),new_description,new_price,new_category,new_quantity,new_photo,new_shipping,new_isActive,prev_name,prev_slug,prev_description,prev_price,prev_category,prev_quantity,prev_photo,prev_shipping,prev_isActive})
+        const productAuditRecord = new productModel_audit({
+            previousProduct: previousProduct.toObject(),
+            newProduct: updatedProduct.toObject(),
+        });
         //console.log(prev_photo,new_name,new_slug,new_description,new_price,new_category,new_quantity,new_shipping,new_isActive,prev_name,prev_slug,prev_description,prev_price,prev_category,prev_quantity,prev_shipping,prev_isActive)
         //if(prev_photo){
         //    products_Audit.prev_photo.data=fs.readFileSync(prev_photo.path)
         //    products_Audit.prev_photo.contentType=prev_photo.type
         //}
-        if(photo){
-            products_Audit.new_photo.data=fs.readFileSync(photo.path)
-            products_Audit.new_photo.contentType=photo.type
-        }
-        await products_Audit.save()
+        
+        await productAuditRecord.save()
 
         res.status(201).send({
             success:true,
             message:'Products updated Successfully',
-            products,
+            updatedProduct,
         })
     } catch (error) {
         console.log(error)
