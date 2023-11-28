@@ -11,6 +11,9 @@ const HomePage = () => {
   const [categories,setCategories]=useState([])
   const [checked, setChecked]=useState([])
   const [radio, setRadio]=useState([])
+  const [total, setTotal]=useState(0)
+  const [page, setPage]=useState(1)
+  const [loading, setLoading]=useState(false)
 
   // Get all categories
   const getAllCategory = async() => {
@@ -25,6 +28,7 @@ const HomePage = () => {
   }
   useEffect(() => {
     getAllCategory();
+    getTotal()
   },[]);
 
   // Get all Producst
@@ -37,6 +41,15 @@ const HomePage = () => {
     } catch (error) {
         console.log(error)
         toast.error('Something went wrong');
+    }
+  }
+
+  const getTotal = async() =>{
+    try {
+      const {data}=await axios.get('/api/v1/product/product-count');
+      setTotal(data?.total);
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -126,6 +139,14 @@ const HomePage = () => {
                     
 
                     ))}
+
+            </div>
+            <div className='m-2 p-3'>
+              {products && products.length<total && (
+                <button className='btn btn-warning' onClick={(e)=>{e.preventDefault()}}>
+                  {loading?'Loading...':"Load More"}
+                </button>
+              )}
             </div>
           </div>
         </div>
