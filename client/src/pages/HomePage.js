@@ -4,6 +4,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import {Button, Checkbox,Radio} from 'antd';
 import { Prices } from '../components/Prices';
+
 const HomePage = () => {
   
   const [products,setProducts]=useState([])
@@ -76,7 +77,9 @@ const HomePage = () => {
   }
   return (
     <Layout title={'Best Offers'}>
+      
         <div className='container-fluid row mt-3'>
+        <img src="../../assets/page.png" class="img-fluid" alt="..."></img>
           <div className='col-md-2'>
             <h4 className='text-center'>Filter by Categories</h4>
             <div className='d-flex flex-column'>
