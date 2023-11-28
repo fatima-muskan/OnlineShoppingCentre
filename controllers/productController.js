@@ -199,3 +199,44 @@ export const updateProductController = async(req,res) =>{
         })
     }
 }
+
+export const productFiltersController=async(req,res)=>{
+    try{
+        const {checked,radio} = req.body
+        let args={}
+        if(checked.length>0 ) args.category=checked
+        if(radio.length>0) args.price={$gte:radio[0],$lte:radio[1]}
+        args.isActive = 1;
+        const products=await productModel.find(args);
+        res.status(200).send({
+            success:true,
+            products,
+        })
+    }catch(error){
+        console.log(error)
+        res.status(500).send({
+            success:false,
+            message:'Error in filtering product',
+            error
+        })
+    }
+}
+
+// Product Count Controller
+export const productCountController=async(req,res)=>{
+    try{
+        
+        const total=await productModel.find({isActive:1}).estimatedDocumentCount();
+        res.status(200).send({
+            success:true,
+            total,
+        })
+    }catch(error){
+        console.log(error)
+        res.status(500).send({
+            success:false,
+            message:'Error in product count',
+            error
+        })
+    }
+}

@@ -1,8 +1,10 @@
-import { async } from "rxjs";
+
 import { comparePassword, hashPassword } from "../helpers/authHelper.js";
 import userModel from "../models/userModel.js";
 import JWT from 'jsonwebtoken';
+import user_Log from "../models/user_Log.js";
 
+// Register Users
 export const registerController = async (req,res) => {
     try {
         const {name,email,password,phone,address,answer}=req.body;
@@ -43,6 +45,15 @@ export const registerController = async (req,res) => {
         })
 
     } catch (error) {
+        // Log the error
+        const errorLog = new user_Log({
+            errorMessage: error.message,
+            errorDetails: 'Error during user registration',
+            stackTrace: error.stack,
+        });
+
+        await errorLog.save();
+
         console.log(error);
         res.status(500).send({
             success:false,
@@ -90,6 +101,14 @@ export const loginController = async (req,res) => {
         });
         
     } catch (error) {
+        // Log the error
+        const errorLog = new user_Log({
+            errorMessage: error.message,
+            errorDetails: 'Error during user registration',
+            stackTrace: error.stack,
+        });
+
+        await errorLog.save();
         console.log(error);
         res.status(500).send({
             success:false,
@@ -131,6 +150,14 @@ export const forgotPasswordController = async (req,res) => {
         await userModel.findByIdAndUpdate(user._id,{password:hashed})
         res.status(200).send({success:true,message:'Password Changed Successfully',});
     } catch (error) {
+        // Log the error
+        const errorLog = new user_Log({
+            errorMessage: error.message,
+            errorDetails: 'Error during user registration',
+            stackTrace: error.stack,
+        });
+
+        await errorLog.save();
         console.log(error);
         res.status(500).send({
             success:false,

@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react'
 import Layout from './../components/Layout/Layout';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import {Checkbox,Radio} from 'antd';
+import {Button, Checkbox,Radio} from 'antd';
 import { Prices } from '../components/Prices';
 const HomePage = () => {
   
@@ -38,10 +38,6 @@ const HomePage = () => {
         toast.error('Something went wrong');
     }
   }
-  //Lifecycle method
-  useEffect(()=>{
-    getAllProducts()
-  },[])
 
   // Filter by Categories
   const handleFilter=(value,id)=>{
@@ -50,9 +46,33 @@ const HomePage = () => {
       all.push(id)
     }
     else{
-      all=all.filter(c=>c!== id);
+      all=all.filter((c)=>c!== id);
     }
     setChecked(all)
+  }
+
+  //Lifecycle method
+  useEffect(()=>{
+    if(!checked.length || !radio.length) getAllProducts();
+    //eslint-disable-next-line
+  },[checked.length,radio.length]);
+
+  useEffect(()=>{
+    if(checked.length || radio.length) filterProducts();
+  },[checked,radio]);
+
+
+  // Get Filtered Products
+  const filterProducts=async()=>{
+    try {
+        const {data}=await axios.post('/api/v1/product/product-filters',{checked,radio,});
+        
+        setProducts(data?.products);
+        
+    } catch (error) {
+        console.log(error)
+        toast.error('Something went wrong');
+    }
   }
   return (
     <Layout title={'Best Offers'}>
@@ -81,6 +101,9 @@ const HomePage = () => {
                 ))}
               </Radio.Group>
             </div>
+            <div className='d-flex flex-column'>
+              <Button className='btn btn-danger' onClick={()=> window.location.reload()}>Reset Filters</Button>
+            </div>
           </div>
           <div className='col-md-9'>
             <h1 className='text-center'> All Products</h1>
@@ -91,7 +114,8 @@ const HomePage = () => {
                       <img src={`/api/v1/product/product-photo/${p._id}`} className="card-img-top" alt={p.name} />
                       <div className="card-body">
                         <h5 className="card-title">{p.name}</h5>
-                        <p className="card-text">{p.description}</p>
+                        <p className="card-text">{p.description.substring(0,40)}</p>
+                        <p className="card-text">PKR {p.price}</p>
                         <button className='btn btn-primary ms-1'>More Details</button>
                         <button className='btn btn-secondary ms-1'>Add to Cart</button>
                       </div>
